@@ -22,7 +22,7 @@
     <setting file="file://$PROJECT_DIR$/../JustASurvivalGame/SurvivalGame/Assets/Scripts/GUIscripts/IngameMenu.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0ee480759f3d481d82ada245dc74f9fd13be00/78/48ed49c5/Texture2D.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GAME/Script/MAIN/Components/PlayerController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../JustASurvivalGame/SurvivalGame/Assets/Scripts/ALT/WorldGeneratorV4.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../JustASurvivalGame/SurvivalGame/Assets/Scripts/ALT/WorldGeneratorV4.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../JustASurvivalGame/SurvivalGame/Assets/Scripts/GUIscripts/MainMenu.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fd824cfb55004855b9e6d51b008c90e4568778/7b/a789c4ad/Task`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/03e250579e8642c1916154c8683b24741b800/f4/a4400bc7/Rigidbody2D.cs" root0="SKIP_HIGHLIGHTING" />
@@ -57,10 +57,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="11424">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="11424" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -80,6 +80,7 @@
       <workItem from="1641332949165" duration="4746000" />
       <workItem from="1641426024312" duration="39342000" />
       <workItem from="1641764786508" duration="42879000" />
+      <workItem from="1642010830674" duration="3091000" />
     </task>
     <servers />
   </component>

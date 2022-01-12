@@ -15,7 +15,7 @@ public class JASGMain {
     public static List<BiomeRegistry.JasgBiome> biomeRegistry = new List<BiomeRegistry.JasgBiome>();
     //public static List<RegistryObject<JasgItem>> itemRegistry = new List<RegistryObject<JasgItem>>();
     public static List<BlockRegistry.JasgBlock> blockRegistry = new List<BlockRegistry.JasgBlock>();
-    //public static List<RegistryObject<JasgEntity>> entityRegistry = new List<RegistryObject<JasgEntity>>();
+    public static List<ObjectRegistry.JasgObject> objectRegistry = new List<ObjectRegistry.JasgObject>();
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void OnBeforeSceneLoadRuntimeMethod() {
@@ -53,6 +53,11 @@ public class JASGMain {
         
         public static JasgRegisterable register(BlockRegistry.JasgBlock registerable) {
             blockRegistry.Add(registerable);
+            return registerable;
+        }
+        
+        public static JasgRegisterable register(ObjectRegistry.JasgObject registerable) {
+            objectRegistry.Add(registerable);
             return registerable;
         }
         //Debug.LogException(new Exception(registerable.nameSpace+":"+registerable.id+" had failed to register correctly do tue its type setting!"));

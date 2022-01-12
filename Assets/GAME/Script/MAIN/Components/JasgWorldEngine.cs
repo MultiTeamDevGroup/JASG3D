@@ -36,6 +36,9 @@ public class JasgWorldEngine : MonoBehaviour {
     public int himidityNodeLimit;
     public int humidityFilteringCycles;
     public int humidityFilteringAmount;
+
+    [Header("Surface Generator")]
+    public ObjectRegistry.JasgObject[,] surfaceObjectArray;
     
     
     
@@ -45,25 +48,42 @@ public class JasgWorldEngine : MonoBehaviour {
 	    }
 
         SetupWorld();
-
+        Task<bool[,]> landmassTask = null;
+        Task<BiomeRegistry.JasgBiome[,]> biomeMapTask = null;
+        Task<ObjectRegistry.JasgObject[,]> surfaceObjectsTask = null;
         switch (worldConfig.landmassGeneratorType) {
             case LandmassGenerator.Perlin:
-	            landmassArray = await GenPerlinLandmass();
+	            landmassTask = GenPerlinLandmass();
 	            break;
             case LandmassGenerator.Hex:
-	            landmassArray = await GenHexLandmass();
+	            //TODO make hex landmass actually gen hexagons
+	            landmassTask = GenHexLandmass();
 	            break;
             case LandmassGenerator.JasgCustom:
+	            //TODO make custom landmass gen
+	            landmassTask = GenPerlinLandmass();
 	            break;
         }
 
         switch (worldConfig.biomeGeneratorType) {
 	        case BiomeGenerator.HeatWetMap:
-		        biomeArray = await GenBiomesHeatWetMap();
+		        biomeMapTask = GenBiomesHeatWetMap();
 		        break;
 	        case BiomeGenerator.RulePuzzle:
+		        //TODO make RulePuzzle Biome Map Generator
+		        biomeMapTask = GenBiomesHeatWetMap();
 		        break;
         }
+
+        surfaceObjectsTask = GenSurfaceObjects();
+
+        await Task.WhenAll(landmassTask);
+        await Task.WhenAll(biomeMapTask);
+        await Task.WhenAll(surfaceObjectsTask);
+
+        landmassArray = landmassTask.Result;
+        biomeArray = biomeMapTask.Result;
+        surfaceObjectArray = surfaceObjectsTask.Result;
         
         Texture2D displayMap;
         displayMap = await CompileBiomesToTexture();
@@ -155,7 +175,6 @@ public class JasgWorldEngine : MonoBehaviour {
 
 	    bool[,] boolArray = new bool[worldConfig.worldSize, worldConfig.worldSize];
 
-	    int a = 0;
 	    for (int x = 0; x < worldConfig.worldSize; x++) {
 		    for (int y = 0; y < worldConfig.worldSize; y++) {
 			    if (y >= (1 - 0.866f)/2 && y <= 0.866 + (1-0.866)/2 && y <= Mathf.Sqrt(3 * x) + 1/2 && y >= -Mathf.Sqrt(3*x) + 1/2 && y <= -Mathf.Sqrt(3 * x) + 2.2320508075 && y >= Mathf.Sqrt(3*x)-1.2320508075) {
@@ -269,6 +288,12 @@ public class JasgWorldEngine : MonoBehaviour {
 	    }
 	    return await Task.FromResult(texture);
     }
+
+    public async Task<ObjectRegistry.JasgObject[,]> GenSurfaceObjects() {
+	    ObjectRegistry.JasgObject[,] surfaceObjects = new ObjectRegistry.JasgObject[worldConfig.worldSize, worldConfig.worldSize];
+	    return await Task.FromResult(surfaceObjects);
+    }
+
     void Update() {
         
     }
