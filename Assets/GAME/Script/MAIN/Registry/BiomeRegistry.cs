@@ -4,6 +4,8 @@ using MultiCoreLibCSE;
 using UnityEngine;
 
 public class BiomeRegistry {
+    
+    public static BiomeSurfaceDecorator genericResources =
 
     public static JasgBiome AlphaValley = new JasgBiome(
         JASGMain.GameId,"alpha_valley",
@@ -189,18 +191,14 @@ public class BiomeRegistry {
     
     public class BiomeSurfaceDecorator {
         public List<BlockRegistry.JasgBlock> surfaceBlocks;
-        public List<BlockRegistry.JasgBlock> foliageBlocks;
-        public List<JasgTree> treeTypes;
+        public List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> surfaceObjects;
 
-        public BiomeSurfaceDecorator(List<BlockRegistry.JasgBlock> listOfSurfaceBlocks, List<BlockRegistry.JasgBlock> listOfFoliageBlocks, List<JasgTree> listOfTreeTypes) {
-            this.surfaceBlocks = listOfSurfaceBlocks;
-            this.foliageBlocks = listOfFoliageBlocks;
-            this.treeTypes = listOfTreeTypes;
+        public BiomeSurfaceDecorator(List<BlockRegistry.JasgBlock> surfaceBlocks, List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> surfaceObjects) {
+            this.surfaceBlocks = surfaceBlocks;
+            this.surfaceObjects = surfaceObjects;
         }
     }
     
-    public class JasgTree : JASGMain.JasgWorldObject {
-        
-    }
+    
     
 }

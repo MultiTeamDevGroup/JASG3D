@@ -87,4 +87,13 @@ namespace MultiCoreLibCSE {
         }
         
     }
+
+    public static class GenericUtils {
+        
+        public class Map<T, K> {
+            public T Key { get; set; }
+            public K Value { get; set; }
+        }
+        
+    }
 }

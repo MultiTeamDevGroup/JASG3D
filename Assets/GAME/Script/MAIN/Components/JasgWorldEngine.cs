@@ -291,6 +291,9 @@ public class JasgWorldEngine : MonoBehaviour {
 
     public async Task<ObjectRegistry.JasgObject[,]> GenSurfaceObjects() {
 	    ObjectRegistry.JasgObject[,] surfaceObjects = new ObjectRegistry.JasgObject[worldConfig.worldSize, worldConfig.worldSize];
+	    
+	    
+	    
 	    return await Task.FromResult(surfaceObjects);
     }
 

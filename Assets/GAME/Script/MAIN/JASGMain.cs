@@ -31,6 +31,10 @@ public class JASGMain {
             Debug.Log("Registered biome [" + biome.nameSpace+":"+biome.id+"]");
         }
         
+        foreach (ObjectRegistry.JasgObject objec in objectRegistry) {
+            Debug.Log("Registered biome [" + objec.nameSpace+":"+objec.id+"]");
+        }
+        
 
     }
 
