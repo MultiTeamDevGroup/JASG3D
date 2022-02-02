@@ -185,7 +185,7 @@ public class BiomeRegistry {
     );
     
     public static JasgBiome TwilightCrossing = new JasgBiome(
-        JASGMain.GameId,"dried_depths",
+        JASGMain.GameId,"twilight_crossing",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
             new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {

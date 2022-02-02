@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using MultiCoreLibCSE;
 using UnityEngine;
 
 public class ObjectRegistry {
-    //public static JasgObject GrassBlock = new JasgObject(JASGMain.GameId,"grass_block", new JasgObject.Properties().BlockMapColor(new Color(0,1,0)));
+    
+    public static JasgObject GrassBlock = new JasgObject(JASGMain.GameId,"grass_block", new JasgObject.Properties().Hardness().Size().MapColor().ToolType().SpawningBiomesAndChances());
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void Register() {
@@ -15,12 +17,14 @@ public class ObjectRegistry {
         public ItemRegistry.ToolType requiredTool;
         public Color mapColor;
         public JASGMain.ResourceLocation model;
+        public GenericUtils.Map<List<BiomeRegistry.JasgBiome>, int> spawnListAndChances;
 
         public JasgObject(string nameSpace, string id, JasgObject.Properties properties) : base(id, nameSpace) {
             this.size = properties.size;
             this.hardness = properties.hardness;
             this.requiredTool = properties.requiredTool;
             this.mapColor = properties.mapColor;
+            this.spawnListAndChances = properties.spawnListAndChances;
             //model = new JASGMain.ResourceLocation(nameSpace + "/models/block/", id+".ply", JASGMain.ModelType.BLOCK);
         }
     
@@ -29,6 +33,7 @@ public class ObjectRegistry {
             public int hardness;
             public ItemRegistry.ToolType requiredTool;
             public Color mapColor;
+            public GenericUtils.Map<List<BiomeRegistry.JasgBiome>, int> spawnListAndChances;
 
             public JasgObject.Properties Size(Vector3Int size) {
                 this.size = size;
@@ -49,7 +54,12 @@ public class ObjectRegistry {
                 this.mapColor = mapColor;
                 return this;
             }
-        
+
+            public JasgObject.Properties SpawningBiomesAndChances(GenericUtils.Map<List<BiomeRegistry.JasgBiome>, int> spawnListAndChances) {
+                this.spawnListAndChances = spawnListAndChances;
+                return this;
+            }
+
         }
     }
 }

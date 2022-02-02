@@ -51,6 +51,7 @@ public class JasgWorldEngine : MonoBehaviour {
         Task<bool[,]> landmassTask = null;
         Task<BiomeRegistry.JasgBiome[,]> biomeMapTask = null;
         Task<ObjectRegistry.JasgObject[,]> surfaceObjectsTask = null;
+        
         switch (worldConfig.landmassGeneratorType) {
             case LandmassGenerator.Perlin:
 	            landmassTask = GenPerlinLandmass();
