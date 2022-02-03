@@ -11,10 +11,7 @@ public class ObjectRegistry {
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void Register() {
-        JASGMain.objectRegistry.Add(DefaultCactus1);
-        JASGMain.objectRegistry.Add(AlphaBush);
-        JASGMain.objectRegistry.Add(DefaultStone1);
-        JASGMain.objectRegistry.Add(AlphaStick);
+        
     }
 
     public class JasgObject : JASGMain.JasgRegisterable {
@@ -29,6 +26,7 @@ public class ObjectRegistry {
             this.hardness = properties.hardness;
             this.requiredTool = properties.requiredTool;
             this.mapColor = properties.mapColor;
+            JASGMain.objectRegistry.Add(this);
             //model = new JASGMain.ResourceLocation(nameSpace + "/models/block/", id+".ply", JASGMain.ModelType.BLOCK);
         }
     

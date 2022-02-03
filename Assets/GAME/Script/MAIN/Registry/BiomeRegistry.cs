@@ -208,21 +208,7 @@ public class BiomeRegistry {
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void Register() {
-        JASGMain.Registry.register(AlphaValley);
-        JASGMain.Registry.register(DarkForest);
-        JASGMain.Registry.register(EnchantedHights);
-        JASGMain.Registry.register(Murk);
-        JASGMain.Registry.register(SereneOvergrowth);
-        JASGMain.Registry.register(Grazenlands);
-        JASGMain.Registry.register(CrimsonDomain);
-        JASGMain.Registry.register(FallenGrove);
-        JASGMain.Registry.register(PermafrostBarren);
-        JASGMain.Registry.register(Desert);
-        JASGMain.Registry.register(GlazedDepression);
-        JASGMain.Registry.register(HadenicWaste);
-        JASGMain.Registry.register(DriedDepths);
-        JASGMain.Registry.register(PetrifiedTaint);
-        JASGMain.Registry.register(TwilightCrossing);
+        
     }
 
     public class JasgBiome : JASGMain.JasgRegisterable {
@@ -233,6 +219,7 @@ public class BiomeRegistry {
             this.decorator = surfaceDecorator;
             this.heatWetProperties = heatWetProperties;
             this.biomeDisplayColor = biomeDisplayColor;
+            JASGMain.biomeRegistry.Add(this);
         }
     }
     

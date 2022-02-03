@@ -388,6 +388,7 @@ MonoBehaviour:
   himidityNodeLimit: 512
   humidityFilteringCycles: 10
   humidityFilteringAmount: 5
+  surfaceGenRandomRange: 60
 --- !u!1 &618545327
 GameObject:
   m_ObjectHideFlags: 0
