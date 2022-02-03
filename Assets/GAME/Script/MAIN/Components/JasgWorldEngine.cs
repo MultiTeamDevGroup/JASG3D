@@ -37,8 +37,9 @@ public class JasgWorldEngine : MonoBehaviour {
     public int humidityFilteringCycles;
     public int humidityFilteringAmount;
 
-    [Header("Surface Generator")]
     public ObjectRegistry.JasgObject[,] surfaceObjectArray;
+    [Header("Surface Generator")]
+    public int surfaceGenRandomRange;
     
     
     
@@ -76,18 +77,19 @@ public class JasgWorldEngine : MonoBehaviour {
 		        break;
         }
 
-        surfaceObjectsTask = GenSurfaceObjects();
-
         await Task.WhenAll(landmassTask);
         await Task.WhenAll(biomeMapTask);
-        await Task.WhenAll(surfaceObjectsTask);
-
+        
         landmassArray = landmassTask.Result;
         biomeArray = biomeMapTask.Result;
+
+        surfaceObjectsTask = GenSurfaceObjects();
+        await Task.WhenAll(surfaceObjectsTask);
         surfaceObjectArray = surfaceObjectsTask.Result;
         
+        
         Texture2D displayMap;
-        displayMap = await CompileBiomesToTexture();
+        displayMap = await CompileObjectsToTexture();
 
         displayMap.Apply();
         displayMap.filterMode = FilterMode.Point;
@@ -107,7 +109,7 @@ public class JasgWorldEngine : MonoBehaviour {
     public async Task<bool[,]> GenPerlinLandmass() {
 	    float[,] noiseMap = new float[worldConfig.worldSize,worldConfig.worldSize];
     
-	    System.Random prng = new System.Random (worldConfig.worldSeed);
+	    System.Random prng = new System.Random(worldConfig.worldSeed);
 	    Vector2[] octaveOffsets = new Vector2[perlinOctaves];
 	    for (int i = 0; i < perlinOctaves; i++) {
 		    float offsetX = prng.Next (-100000, 100000) + perlinOffset.x;
@@ -292,10 +294,48 @@ public class JasgWorldEngine : MonoBehaviour {
 
     public async Task<ObjectRegistry.JasgObject[,]> GenSurfaceObjects() {
 	    ObjectRegistry.JasgObject[,] surfaceObjects = new ObjectRegistry.JasgObject[worldConfig.worldSize, worldConfig.worldSize];
+
+	    bool[,] potentialObjectSpots = new bool[worldConfig.worldSize, worldConfig.worldSize];
+
+	    System.Random prng = new System.Random(worldConfig.worldSeed);
 	    
-	    
+	    for (int x = 0; x < worldConfig.worldSize; x++) {
+		    for (int y = 0; y < worldConfig.worldSize; y++) {
+			    if (prng.Next(0, 100) > surfaceGenRandomRange && landmassArray[x, y]) {
+				    potentialObjectSpots[x, y] = true;
+			    }else {
+				    potentialObjectSpots[x, y] = false;
+			    }
+		    }
+	    }
+
+	    for (int x = 0; x < worldConfig.worldSize; x++) {
+		    for (int y = 0; y < worldConfig.worldSize; y++) {
+			    if (potentialObjectSpots[x, y]) {
+				    BiomeRegistry.BiomeSurfaceDecorator decorator = biomeArray[x, y].decorator;
+
+				    int index = prng.Next(0, decorator.surfaceObjects.Count);
+			    
+				    if (decorator.surfaceObjects[index].Value < prng.Next(0, 100)) {
+					    surfaceObjects[x, y] = decorator.surfaceObjects[index].Key;
+				    }
+			    }
+		    }
+	    }
 	    
 	    return await Task.FromResult(surfaceObjects);
+    }
+    
+    public async Task<Texture2D> CompileObjectsToTexture() {
+	    Texture2D texture = new Texture2D(worldConfig.worldSize, worldConfig.worldSize);
+	    for (int x = 0; x < worldConfig.worldSize; x++) {
+		    for (int y = 0; y < worldConfig.worldSize; y++) {
+			    if (surfaceObjectArray[x, y] != null) {
+				    texture.SetPixel(x, y, surfaceObjectArray[x,y].mapColor);
+			    }
+		    }
+	    }
+	    return await Task.FromResult(texture);
     }
 
     void Update() {

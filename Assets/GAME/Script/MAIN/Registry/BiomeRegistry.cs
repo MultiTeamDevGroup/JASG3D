@@ -9,19 +9,13 @@ public class BiomeRegistry {
         BlockRegistry.GrassBlock 
     };
 
-    public static BiomeSurfaceDecorator genericResources = new BiomeSurfaceDecorator(
-        grassySurfaceCollection,
-        new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
-        }
-    );
-
     public static JasgBiome AlphaValley = new JasgBiome(
         JASGMain.GameId,"alpha_valley",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(22, 50),
@@ -32,8 +26,10 @@ public class BiomeRegistry {
         JASGMain.GameId,"dark_forest",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
             
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(20, 60),
@@ -44,8 +40,9 @@ public class BiomeRegistry {
         JASGMain.GameId,"enchanted_hights",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(20, 60),
@@ -56,8 +53,9 @@ public class BiomeRegistry {
         JASGMain.GameId,"murk",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(26, 75),
@@ -68,8 +66,9 @@ public class BiomeRegistry {
         JASGMain.GameId,"serene_overgrowth",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(32, 100),
@@ -80,8 +79,9 @@ public class BiomeRegistry {
         JASGMain.GameId,"grazenlands",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(28, 33),
@@ -92,8 +92,9 @@ public class BiomeRegistry {
         JASGMain.GameId,"crimson_domain",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(15, 0),
@@ -104,8 +105,9 @@ public class BiomeRegistry {
         JASGMain.GameId,"fallen_grove",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(8, 40),
@@ -116,8 +118,9 @@ public class BiomeRegistry {
         JASGMain.GameId,"permafrost_barren",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(-10, 33),
@@ -128,8 +131,9 @@ public class BiomeRegistry {
         JASGMain.GameId,"desert",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(45, 0),
@@ -140,8 +144,9 @@ public class BiomeRegistry {
         JASGMain.GameId,"glazed_depression",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(14, 0),
@@ -152,8 +157,9 @@ public class BiomeRegistry {
         JASGMain.GameId,"hadenic_waste",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(14, 40),
@@ -164,8 +170,9 @@ public class BiomeRegistry {
         JASGMain.GameId,"dried_depths",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(35, 0),
@@ -176,8 +183,9 @@ public class BiomeRegistry {
         JASGMain.GameId,"petrified_taint",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }
         ),
         MathHelperUtil.scaleBiomeTempHumProperty(0, 33),
@@ -188,8 +196,9 @@ public class BiomeRegistry {
         JASGMain.GameId,"twilight_crossing",
         new BiomeSurfaceDecorator(
             grassySurfaceCollection,
-            new List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> {
-            
+            new List<KeyValuePair<ObjectRegistry.JasgObject, int>> {
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaStick, 70),
+                new KeyValuePair<ObjectRegistry.JasgObject, int>(ObjectRegistry.AlphaBush, 30)
             }),
         MathHelperUtil.scaleBiomeTempHumProperty(-5, 33),
         new Color32(105, 151, 193, 255)
@@ -229,9 +238,9 @@ public class BiomeRegistry {
     
     public class BiomeSurfaceDecorator {
         public List<BlockRegistry.JasgBlock> surfaceBlocks;
-        public List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> surfaceObjects;
+        public List<KeyValuePair<ObjectRegistry.JasgObject, int>> surfaceObjects;
 
-        public BiomeSurfaceDecorator(List<BlockRegistry.JasgBlock> surfaceBlocks, List<GenericUtils.Map<ObjectRegistry.JasgObject, int>> surfaceObjects) {
+        public BiomeSurfaceDecorator(List<BlockRegistry.JasgBlock> surfaceBlocks, List<KeyValuePair<ObjectRegistry.JasgObject, int>> surfaceObjects) {
             this.surfaceBlocks = surfaceBlocks;
             this.surfaceObjects = surfaceObjects;
         }

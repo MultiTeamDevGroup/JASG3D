@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class ObjectRegistry {
     
-    public static JasgObject GrassBlock = new JasgObject(JASGMain.GameId,"grass_block", new JasgObject.Properties().Hardness().Size().MapColor().ToolType().SpawningBiomesAndChances());
+    public static JasgObject DefaultCactus1 = new JasgObject(JASGMain.GameId,"default_cactus_1", new JasgObject.Properties().Hardness(0).Size(1,1,1).MapColor(Color.red).ToolType(ItemRegistry.ToolType.Hand));
+    public static JasgObject AlphaBush = new JasgObject(JASGMain.GameId,"alpha_bush", new JasgObject.Properties().Hardness(0).Size(1,1,1).MapColor(Color.red).ToolType(ItemRegistry.ToolType.Hand));
+    public static JasgObject DefaultStone1 = new JasgObject(JASGMain.GameId,"default_stone_1", new JasgObject.Properties().Hardness(0).Size(1,1,1).MapColor(Color.red).ToolType(ItemRegistry.ToolType.Hand));
+    public static JasgObject AlphaStick = new JasgObject(JASGMain.GameId,"alpha_stick", new JasgObject.Properties().Hardness(0).Size(1,1,1).MapColor(Color.red).ToolType(ItemRegistry.ToolType.Hand));
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void Register() {
-        //JASGMain.Registry.register(GrassBlock);
+        JASGMain.objectRegistry.Add(DefaultCactus1);
+        JASGMain.objectRegistry.Add(AlphaBush);
+        JASGMain.objectRegistry.Add(DefaultStone1);
+        JASGMain.objectRegistry.Add(AlphaStick);
     }
 
     public class JasgObject : JASGMain.JasgRegisterable {
@@ -17,14 +23,12 @@ public class ObjectRegistry {
         public ItemRegistry.ToolType requiredTool;
         public Color mapColor;
         public JASGMain.ResourceLocation model;
-        public GenericUtils.Map<List<BiomeRegistry.JasgBiome>, int> spawnListAndChances;
 
         public JasgObject(string nameSpace, string id, JasgObject.Properties properties) : base(id, nameSpace) {
             this.size = properties.size;
             this.hardness = properties.hardness;
             this.requiredTool = properties.requiredTool;
             this.mapColor = properties.mapColor;
-            this.spawnListAndChances = properties.spawnListAndChances;
             //model = new JASGMain.ResourceLocation(nameSpace + "/models/block/", id+".ply", JASGMain.ModelType.BLOCK);
         }
     
@@ -33,10 +37,9 @@ public class ObjectRegistry {
             public int hardness;
             public ItemRegistry.ToolType requiredTool;
             public Color mapColor;
-            public GenericUtils.Map<List<BiomeRegistry.JasgBiome>, int> spawnListAndChances;
 
-            public JasgObject.Properties Size(Vector3Int size) {
-                this.size = size;
+            public JasgObject.Properties Size(int x, int y, int z) {
+                this.size = new Vector3Int(x, y, z);
                 return this;
             }
             
@@ -52,11 +55,6 @@ public class ObjectRegistry {
 
             public JasgObject.Properties MapColor(Color mapColor) {
                 this.mapColor = mapColor;
-                return this;
-            }
-
-            public JasgObject.Properties SpawningBiomesAndChances(GenericUtils.Map<List<BiomeRegistry.JasgBiome>, int> spawnListAndChances) {
-                this.spawnListAndChances = spawnListAndChances;
                 return this;
             }
 
