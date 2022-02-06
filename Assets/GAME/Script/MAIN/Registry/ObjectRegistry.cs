@@ -10,9 +10,7 @@ public class ObjectRegistry {
     public static JasgObject AlphaStick = new JasgObject(JASGMain.GameId,"alpha_stick", new JasgObject.Properties().Hardness(0).Size(1,1,1).MapColor(Color.red).ToolType(ItemRegistry.ToolType.Hand));
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    public static void Register() {
-        
-    }
+    public static void Register() {}
 
     public class JasgObject : JASGMain.JasgRegisterable {
         public Vector3Int size;
@@ -26,7 +24,7 @@ public class ObjectRegistry {
             this.hardness = properties.hardness;
             this.requiredTool = properties.requiredTool;
             this.mapColor = properties.mapColor;
-            JASGMain.objectRegistry.Add(this);
+            JASGMain.Registry.register(this);
             //model = new JASGMain.ResourceLocation(nameSpace + "/models/block/", id+".ply", JASGMain.ModelType.BLOCK);
         }
     

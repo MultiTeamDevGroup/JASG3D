@@ -7,7 +7,6 @@ public class BlockRegistry {
     
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void Register() {
-        JASGMain.Registry.register(GrassBlock);
     }
 
     public class JasgBlock : JASGMain.JasgRegisterable {
@@ -18,6 +17,7 @@ public class BlockRegistry {
         public JasgBlock(string nameSpace, string id, JasgBlock.Properties properties) : base(id, nameSpace) {
             hardness = properties.harndessLevel.Equals(null) ? 1 : properties.harndessLevel;
             mapColor = properties.mapColor.Equals(null) ? new Color(0,0,0) : properties.mapColor;
+            JASGMain.Registry.register(this);
             //model = new JASGMain.ResourceLocation(nameSpace + "/models/block/", id+".ply", JASGMain.ModelType.BLOCK);
         }
         

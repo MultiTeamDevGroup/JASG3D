@@ -219,7 +219,7 @@ public class BiomeRegistry {
             this.decorator = surfaceDecorator;
             this.heatWetProperties = heatWetProperties;
             this.biomeDisplayColor = biomeDisplayColor;
-            JASGMain.biomeRegistry.Add(this);
+            JASGMain.Registry.register(this);
         }
     }
     
