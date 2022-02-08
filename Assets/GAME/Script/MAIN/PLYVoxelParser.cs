@@ -100,14 +100,96 @@ public class PLYVoxelParser {
                 voxelArray.Add(new Voxel(Int32.Parse(vxLn[0]),Int32.Parse(vxLn[1]),Int32.Parse(vxLn[2]),Int32.Parse(vxLn[3]),Int32.Parse(vxLn[4]),Int32.Parse(vxLn[5])));
             }
         }
-        PLYFile plyFile = new PLYFile(voxelArray);
-        
         
         //Removing all voxels that has all 6 sides covered by another one, so less faces get turned into mesh == less lag
         
         //TODO make this part of the ply file parsing actually do something
+        int biggestX = 0;
+        int biggestY = 0;
+        int biggestZ = 0;
+        int smallestX = 0;
+        int smallestY = 0;
+        int smallestZ = 0;
         
-        return plyFile;
+        for (int i = 0; i < voxelArray.Count; i++) {
+            if (voxelArray[i].x > biggestX) {
+                biggestX = voxelArray[i].x;
+            }
+            if (voxelArray[i].y > biggestY) {
+                biggestY = voxelArray[i].y;
+            }
+            if (voxelArray[i].z > biggestZ) {
+                biggestZ = voxelArray[i].z;
+            }
+            
+            if (voxelArray[i].x < smallestX) {
+                smallestX = voxelArray[i].x;
+            }
+            if (voxelArray[i].y < smallestY) {
+                smallestY = voxelArray[i].y;
+            }
+            if (voxelArray[i].z < smallestZ) {
+                smallestZ = voxelArray[i].z;
+            }
+        }
+
+        int xOffset = Mathf.Abs(smallestX) + 1;
+        int yOffset = Mathf.Abs(smallestY) + 1;
+        int zOffset = Mathf.Abs(smallestZ) + 1;
+        
+        Debug.Log("X: " + biggestX + " - " + smallestX + " - " + xOffset);
+        Debug.Log("Y: " + biggestY + " - " + smallestY + " - " + yOffset);
+        Debug.Log("Z: " + biggestZ + " - " + smallestZ + " - " + zOffset);
+        
+        Voxel[,,] voxArr = new Voxel[(biggestX + xOffset) * 10, (biggestY + yOffset) * 10, (biggestZ + zOffset) * 10];
+
+        foreach (Voxel voxel in voxelArray) {
+            voxArr[voxel.x + xOffset, voxel.y + yOffset, voxel.z + zOffset] = voxel;
+        }
+
+        int limX = biggestX + xOffset;
+        int limY = biggestY + yOffset;
+        int limZ = biggestZ + zOffset;
+        for (int x = 0; x < limX; x++) {
+            for (int y = 0; y < limY; y++) {
+                for (int z = 0; z < limZ; z++) {
+                    if (x > 0 && y > 0 && z > 0 && x < limX && y < limY && z < limZ) {
+                        bool top = false;
+                        bool bottom = false;
+                        bool left = false;
+                        bool rigth = false;
+                        bool infront = false;
+                        bool behind = false;
+                        
+                        if (voxArr[x, y + 1, z] != null) top = true;
+                        if (voxArr[x, y - 1, z] != null) bottom = true;
+                        if (voxArr[x+1, y, z] != null) left = true;
+                        if (voxArr[x-1, y, z] != null) rigth = true;
+                        if (voxArr[x, y, z+1] != null) infront = true;
+                        if (voxArr[x, y, z-1] != null) behind = true;
+
+                        if (top && bottom && left && rigth && infront && behind) {
+                            voxArr[x, y, z] = null;
+                        }
+                        
+                    }
+                }
+            }
+        }
+
+        List<Voxel> optimisedVoxels = new List<Voxel>();;
+        
+        for (int x = 0; x < limX; x++) {
+            for (int y = 0; y < limY; y++) {
+                for (int z = 0; z < limZ; z++) {
+                    if (voxArr[x, y, z] != null) {
+                        optimisedVoxels.Add(voxArr[x,y,z]);
+                    }
+                }
+            }
+        }
+
+        return new PLYFile(optimisedVoxels);
     }
 
     public class Voxel {
@@ -134,6 +216,10 @@ public class PLYVoxelParser {
 
         public Vector3Int getAsVector() {
             return new Vector3Int(this.x, this.y, this.z);
+        }
+
+        public Color32 getAsColor() {
+            return new Color32((byte)this.r, (byte)this.g, (byte)this.b, 255);
         }
     }
 
