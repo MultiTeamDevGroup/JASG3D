@@ -378,7 +378,8 @@ public class JasgWorldEngine : MonoBehaviour {
     public async void LoadChunksAroundPlayer() {
 	    foreach (WorldChunk chunk in worldChunks) {
 		    Vector2Int chunkPos = chunk.chunkPosition;
-		    Vector2Int playerChunkPos = player.getChunkPos();
+		    Vector3 playerPos = player.transform.position;
+		    Vector2Int playerChunkPos = new Vector2Int(Mathf.RoundToInt(playerPos.x) / worldConfig.chunkSize, Mathf.RoundToInt(playerPos.z) / worldConfig.chunkSize);
 
 		    if (Vector2.Distance(chunkPos, playerChunkPos) > player.chunkLoadingDistance) {
 			    if (chunk.isLoaded) {
@@ -410,11 +411,13 @@ public class WorldChunk {
 	}
 
 	public WorldChunk load() {
+		Debug.Log("Loaded chunk at " + chunkPosition);
 		this.isLoaded = true;
 		return this;
 	}
 	
 	public WorldChunk unload() {
+		Debug.Log("Unloaded chunk at " + chunkPosition);
 		this.isLoaded = false;
 		return this;
 	}

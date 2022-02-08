@@ -35,8 +35,4 @@ public class PlayerController : MonoBehaviour {
         
         rb2D.MovePosition(rb2D.position + Movement.normalized * MovementSpeed * Time.deltaTime);
     }
-
-    public Vector2Int getChunkPos() {
-        return new Vector2Int(0, 0);
-    }
 }
