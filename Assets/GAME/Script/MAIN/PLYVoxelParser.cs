@@ -153,7 +153,7 @@ public class PLYVoxelParser {
         for (int x = 0; x < limX; x++) {
             for (int y = 0; y < limY; y++) {
                 for (int z = 0; z < limZ; z++) {
-                    if (x > 0 && y > 0 && z > 0 && x < limX && y < limY && z < limZ) {
+                    if (x > 1 && y > 1 && z > 1 && x < limX && y < limY && z < limZ) {
                         bool top = false;
                         bool bottom = false;
                         bool left = false;
