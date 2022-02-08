@@ -77,6 +77,8 @@ public class PLYVoxelParser {
     }
     
     public static PLYFile parse(string fileContent) {
+        
+        //Initial loading voxels from text file to PLYFile object
         String[] arr = fileContent.Split(new[] { "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
         bool isFileValid = arr[0] == "ply";
         int voxelArraySize = 0;
@@ -96,7 +98,14 @@ public class PLYVoxelParser {
                 voxelArray.Add(new Voxel(Int32.Parse(vxLn[0]),Int32.Parse(vxLn[1]),Int32.Parse(vxLn[2]),Int32.Parse(vxLn[3]),Int32.Parse(vxLn[4]),Int32.Parse(vxLn[5])));
             }
         }
-        return new PLYFile(voxelArray);
+        PLYFile plyFile = new PLYFile(voxelArray);
+        
+        
+        //Removing all voxels that has all 6 sides covered by another one, so less faces get turned into mesh == less lag
+        
+        //TODO make this part of the ply file parsing actually do something
+        
+        return plyFile;
     }
 
     public class Voxel {
@@ -119,6 +128,10 @@ public class PLYVoxelParser {
 
         public void print() {
             Debug.Log("x: " + x + " y: " + y + " z: " + z + " r: " + r + " g: " + g + " b: " + b);
+        }
+
+        public Vector3Int getAsVector() {
+            return new Vector3Int(this.x, this.y, this.z);
         }
     }
 

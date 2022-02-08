@@ -17,7 +17,7 @@ public class ObjectRegistry {
         public int hardness;
         public ItemRegistry.ToolType requiredTool;
         public Color mapColor;
-        public JASGMain.ResourceLocation model;
+        public JASGMain.ResourceLocation resourceLocation;
 
         public JasgObject(string nameSpace, string id, JasgObject.Properties properties) : base(id, nameSpace) {
             this.size = properties.size;
@@ -25,7 +25,7 @@ public class ObjectRegistry {
             this.requiredTool = properties.requiredTool;
             this.mapColor = properties.mapColor;
             JASGMain.Registry.register(this);
-            //model = new JASGMain.ResourceLocation(nameSpace + "/models/block/", id+".ply", JASGMain.ModelType.BLOCK);
+            this.resourceLocation = new JASGMain.ResourceLocation(this, "objects/");
         }
     
         public class Properties {

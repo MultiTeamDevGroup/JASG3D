@@ -349,7 +349,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.896695, y: 2.8053026, z: 8.237389}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 911177825}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -367,6 +368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 0}
   uiMapDisplay: {fileID: 618545328}
+  player: {fileID: 1595057271}
   bypassLoadConfig: 1
   worldConfig:
     loadExisting: 0
@@ -377,18 +379,20 @@ MonoBehaviour:
     chunkSize: 16
     landmassGeneratorType: 1
     biomeGeneratorType: 1
+    worldHightModifier: 10
+    worldSeaLevel: 4
   perlinScale: 200
   perlinOctaves: 6
   perlinPersistance: 1
   perlinLacunarity: 2
   perlinOffset: {x: 10, y: 10}
-  perlinDivision: 0.6
   hexagonSize: 4
   biomeMapping: {fileID: 2800000, guid: eaef11a0df562514baaaca5a23acd568, type: 3}
   himidityNodeLimit: 512
   humidityFilteringCycles: 10
   humidityFilteringAmount: 5
   surfaceGenRandomRange: 60
+  worldChunks: []
 --- !u!1 &618545327
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,6 +489,36 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &911177824
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 911177825}
+  m_Layer: 0
+  m_Name: ChunkHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &911177825
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911177824}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 100682155}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1157469816
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,7 +705,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1595057269}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.7240539, y: 2.1707983, z: 1.0661442}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 57391133}
@@ -694,6 +728,7 @@ MonoBehaviour:
   MovementSpeed: 5
   rb2D: {fileID: 1595057273}
   graphics: {fileID: 57391132}
+  chunkLoadingDistance: 4
 --- !u!65 &1595057272
 BoxCollider:
   m_ObjectHideFlags: 0

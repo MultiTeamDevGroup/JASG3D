@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour {
     public float MovementSpeed = 5f;
     public Rigidbody rb2D;
     public GameObject graphics;
+
+    public int chunkLoadingDistance = 1;
     
     
     private Vector3 Movement;
@@ -32,5 +34,9 @@ public class PlayerController : MonoBehaviour {
         Movement.y = 0;
         
         rb2D.MovePosition(rb2D.position + Movement.normalized * MovementSpeed * Time.deltaTime);
+    }
+
+    public Vector2Int getChunkPos() {
+        return new Vector2Int(0, 0);
     }
 }

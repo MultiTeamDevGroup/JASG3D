@@ -71,72 +71,16 @@ public class JASGMain {
 
     public class ResourceLocation {
         public Mesh model;
+        public string location;
 
-        public ResourceLocation(ObjectRegistry.JasgObject jasgObject, string location) {
-            string fileLocation = jasgObject.nameSpace + "/models/" + location + jasgObject.id;
-            this.model = PLYVoxelParser.parse(Resources.Load<TextAsset>(fileLocation).text).generateMesh();
-        }
-        
-        public ResourceLocation(BlockRegistry.JasgBlock jasgBlock, string location) {
-            string fileLocation = jasgBlock.nameSpace + "/textures/" + location + jasgBlock.id;
+        public ResourceLocation(JasgRegisterable registerable, string location) {
+            this.location = registerable.nameSpace + "/models/" + location + registerable.id;
+            if (!(Resources.Load<TextAsset>(this.location) != null)) {
+                this.model = PLYVoxelParser.parse(Resources.Load<TextAsset>(this.location).text).generateMesh();
+            }else {
+                Debug.LogException(new Exception("File at "+ this.location +" can not be loaded"));
+            }
 
-            Texture2D texture = Resources.Load<Texture2D>(fileLocation);
-            
-            
-            List<Vector3> vertices_ = new List<Vector3>();
-            List<Color> vertexColor = new List<Color>();
-            List<int> tris = new List<int>();
-            
-            vertices_.Add(new Vector3(0, 0, 0));
-            vertices_.Add(new Vector3(0, 0, 1));
-            vertices_.Add(new Vector3(1, 0, 0));
-            vertices_.Add(new Vector3(1, 0, 1));
-            
-            vertices_.Add(new Vector3(0, 1, 0));
-            vertices_.Add(new Vector3(0, 1, 1));
-            vertices_.Add(new Vector3(1, 1, 0));
-            vertices_.Add(new Vector3(1, 1, 1));
-
-            Color vertexColor_ = new Color32();
-            vertexColor.Add(vertexColor_);
-            vertexColor.Add(vertexColor_);
-            vertexColor.Add(vertexColor_);
-            vertexColor.Add(vertexColor_);
-            vertexColor.Add(vertexColor_);
-            vertexColor.Add(vertexColor_);
-            vertexColor.Add(vertexColor_);
-            vertexColor.Add(vertexColor_);
-
-            int[] triangles_ = new int[] {
-                //bottom
-                 + 0,  + 2,  + 1,
-                 + 1,  + 2,  + 3,
-                //top
-                 + 4,  + 5,  + 6,
-                 + 5,  + 7,  + 6,
-                //front
-                 + 0,  + 4,  + 2,
-                 + 4,  + 6,  + 2,
-                //left
-                 + 1,  + 5,  + 4,
-                 + 4,  + 0,  + 1,
-                //right
-                 + 2,  + 6,  + 7,
-                 + 7,  + 3,  + 2,
-                //back
-                 + 5,  + 1,  + 3,
-                 + 3,  + 7,  + 5
-            };
-            
-            tris.AddRange(triangles_);
-
-            Mesh ret = new Mesh();
-            ret.Clear();
-            ret.vertices = vertices_.ToArray();
-            ret.triangles = tris.ToArray();
-            ret.colors = vertexColor.ToArray();
-            
-            
         }
 
     }

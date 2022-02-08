@@ -15,6 +15,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/GAME/Script/test/testMeshLoader.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GAME/Script/MAIN/Registry/BlockRegistry.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0ee480759f3d481d82ada245dc74f9fd13be00/99/ab2b82ca/ResourcesAPI.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0ee480759f3d481d82ada245dc74f9fd13be00/a1/85e40df7/Mathf.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../JustASurvivalGame/SurvivalGame/Assets/Scripts/ALT/PlayerController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../JustASurvivalGame/SurvivalGame/Assets/Scripts/Game/JasgWorldEngine.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/GAME/Script/MAIN/MultiCoreLibCSharpEdition.cs" root0="FORCE_HIGHLIGHTING" />
@@ -93,7 +94,7 @@
       <workItem from="1643817126681" duration="4093000" />
       <workItem from="1643914028226" duration="8124000" />
       <workItem from="1643987065480" duration="4575000" />
-      <workItem from="1644329685458" duration="2596000" />
+      <workItem from="1644329685458" duration="10406000" />
     </task>
     <servers />
   </component>

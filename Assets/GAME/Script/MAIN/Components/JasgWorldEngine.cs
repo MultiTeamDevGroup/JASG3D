@@ -13,20 +13,20 @@ public class JasgWorldEngine : MonoBehaviour {
     [Header("References")]
     public GameObject pauseMenu;
     public Renderer uiMapDisplay;
+    public PlayerController player;
 
     [Header("Main World Config")]
     public bool bypassLoadConfig = false;
     public WorldConfig worldConfig;
 
     [Header("Landmass Generator")]
-    public bool[,] landmassArray;
+    public int[,] landmassArray;
     [Header("Perlin Landmass")]
     public float perlinScale;
     public int perlinOctaves;
     public float perlinPersistance;
     public float perlinLacunarity;
     public Vector2 perlinOffset;
-    public float perlinDivision;
     [Header("Hex Landmass")]
     public int hexagonSize;
 
@@ -40,16 +40,18 @@ public class JasgWorldEngine : MonoBehaviour {
     public ObjectRegistry.JasgObject[,] surfaceObjectArray;
     [Header("Surface Generator")]
     public int surfaceGenRandomRange;
-    
-    
-    
+
+    [Header("World Components")] 
+    public List<WorldChunk> worldChunks;
+
     public async void Start() {
 	    if (!bypassLoadConfig) {
 		    worldConfig = LoadWorldConfig();
 	    }
 
         SetupWorld();
-        Task<bool[,]> landmassTask = null;
+        
+        Task<int[,]> landmassTask = null;
         Task<BiomeRegistry.JasgBiome[,]> biomeMapTask = null;
         Task<ObjectRegistry.JasgObject[,]> surfaceObjectsTask = null;
         
@@ -59,7 +61,8 @@ public class JasgWorldEngine : MonoBehaviour {
 	            break;
             case LandmassGenerator.Hex:
 	            //TODO make hex landmass actually gen hexagons
-	            landmassTask = GenHexLandmass();
+	            //landmassTask = GenHexLandmass();
+	            landmassTask = GenPerlinLandmass();
 	            break;
             case LandmassGenerator.JasgCustom:
 	            //TODO make custom landmass gen
@@ -95,7 +98,9 @@ public class JasgWorldEngine : MonoBehaviour {
         displayMap.filterMode = FilterMode.Point;
                 
         uiMapDisplay.GetComponent<SpriteRenderer>().sprite = Sprite.Create(displayMap, new Rect(0.0f, 0.0f, worldConfig.worldSize, worldConfig.worldSize), new Vector2(0.5f, 0.5f), 100.0f);
-
+        
+        FinalizeWorldGeneration();
+        
     }
 
     public WorldConfig LoadWorldConfig() {
@@ -106,7 +111,7 @@ public class JasgWorldEngine : MonoBehaviour {
 	    
     }
 
-    public async Task<bool[,]> GenPerlinLandmass() {
+    public async Task<int[,]> GenPerlinLandmass() {
 	    float[,] noiseMap = new float[worldConfig.worldSize,worldConfig.worldSize];
     
 	    System.Random prng = new System.Random(worldConfig.worldSeed);
@@ -160,18 +165,14 @@ public class JasgWorldEngine : MonoBehaviour {
 		    }
 	    }
 	    
-		bool[,] boolArray = new bool[worldConfig.worldSize, worldConfig.worldSize];
+		int[,] landmass = new int[worldConfig.worldSize, worldConfig.worldSize];
 	    for (int x = 0; x < worldConfig.worldSize; x++) {
 		    for (int y = 0; y < worldConfig.worldSize; y++) {
-			    if (noiseMap[x, y] >= perlinDivision) {
-				    boolArray[x, y] = true;
-			    }else {
-				    boolArray[x, y] = false;
-			    }
+			    landmass[x, y] = Mathf.RoundToInt(noiseMap[x, y] * worldConfig.worldHightModifier);
 		    }   
 	    }
 
-	    return await Task.FromResult(boolArray);
+	    return await Task.FromResult(landmass);
     }
 
     public async Task<bool[,]> GenHexLandmass() {
@@ -193,11 +194,8 @@ public class JasgWorldEngine : MonoBehaviour {
 	    Texture2D texture = new Texture2D(worldConfig.worldSize, worldConfig.worldSize);
 	    for (int x = 0; x < worldConfig.worldSize; x++) {
 		    for (int y = 0; y < worldConfig.worldSize; y++) {
-			    if (landmassArray[x, y] == true) {
-				    texture.SetPixel(x,y,new Color(1,1,1));
-			    }else {
-				    texture.SetPixel(x,y,new Color(0,0,0));
-			    }
+			    int a = landmassArray[x, y] / worldConfig.worldHightModifier;
+			    texture.SetPixel(x,y,new Color(a,a,a));
 		    }
 	    }
 	    return await Task.FromResult(texture);
@@ -301,7 +299,7 @@ public class JasgWorldEngine : MonoBehaviour {
 	    
 	    for (int x = 0; x < worldConfig.worldSize; x++) {
 		    for (int y = 0; y < worldConfig.worldSize; y++) {
-			    if (prng.Next(0, 100) > surfaceGenRandomRange && landmassArray[x, y]) {
+			    if (prng.Next(0, 100) > surfaceGenRandomRange && landmassArray[x, y] > worldConfig.worldSeaLevel) {
 				    potentialObjectSpots[x, y] = true;
 			    }else {
 				    potentialObjectSpots[x, y] = false;
@@ -338,23 +336,110 @@ public class JasgWorldEngine : MonoBehaviour {
 	    return await Task.FromResult(texture);
     }
 
+    public void FinalizeWorldGeneration() {
+	    
+	    System.Random prng = new System.Random(worldConfig.worldSeed);
+	    
+	    //Map out chunks
+	    int numa = worldConfig.worldSize / worldConfig.chunkSize;
+	    for (int chunkX = 0; chunkX < numa; chunkX++) {
+		    for (int chunkY = 0; chunkY < numa; chunkY++) {
+			    WorldChunk chunk = new WorldChunk(new Vector2Int(chunkX, chunkY), worldConfig.chunkSize);
+			    
+			    for (int x = 0; x < worldConfig.chunkSize; x++) {
+				    for (int y = 0; y < worldConfig.chunkSize; y++) {
+					    int realWorldX = chunkX * worldConfig.chunkSize + x;
+					    int realWorldY = chunkY * worldConfig.chunkSize + y;
+
+					    int blockAltitude = landmassArray[realWorldX, realWorldY];
+					    
+					    int maxRandLength = biomeArray[realWorldX, realWorldY].decorator.surfaceBlocks.Count;
+					    chunk.SetBlockInChunk(biomeArray[realWorldX, realWorldY].decorator.surfaceBlocks[prng.Next(0, maxRandLength)], x, y, blockAltitude);
+					    
+					    if (surfaceObjectArray[realWorldX, realWorldY] != null) {
+						    chunk.SetObjectInChunk(surfaceObjectArray[realWorldX, realWorldY], x, y, blockAltitude+1);
+					    }
+				    }
+			    }
+			    
+			    worldChunks.Add(chunk);
+		    }
+	    }
+	    
+    }
+
+    
+    
     void Update() {
-        
+	    LoadChunksAroundPlayer();
+    }
+
+
+    public async void LoadChunksAroundPlayer() {
+	    foreach (WorldChunk chunk in worldChunks) {
+		    Vector2Int chunkPos = chunk.chunkPosition;
+		    Vector2Int playerChunkPos = player.getChunkPos();
+
+		    if (Vector2.Distance(chunkPos, playerChunkPos) > player.chunkLoadingDistance) {
+			    if (chunk.isLoaded) {
+				    chunk.unload();
+			    }
+		    }else {
+			    if (!chunk.isLoaded) {
+				    chunk.load();
+			    }
+		    }
+		    
+		    await Task.Yield();
+	    }
     }
 }
 
-    public enum LandmassGenerator {
-        Hex,
-        Perlin,
-        JasgCustom
-    }
+[Serializable]
+public class WorldChunk {
+	public Vector2Int chunkPosition;
+	public BlockRegistry.JasgBlock[,,] chunkBlocks;
+	public ObjectRegistry.JasgObject[,,] chunkObjects;
+	public bool isLoaded;
 
-    public enum BiomeGenerator {
-        RulePuzzle,
-        HeatWetMap
-    }
+	public WorldChunk(Vector2Int chunkPosition, int chunkSize) {
+		this.chunkPosition = chunkPosition;
+		this.chunkBlocks = new BlockRegistry.JasgBlock[chunkSize, chunkSize, chunkSize];
+		this.chunkObjects = new ObjectRegistry.JasgObject[chunkSize, chunkSize, chunkSize];
+		this.isLoaded = false;
+	}
 
-[System.Serializable]
+	public WorldChunk load() {
+		this.isLoaded = true;
+		return this;
+	}
+	
+	public WorldChunk unload() {
+		this.isLoaded = false;
+		return this;
+	}
+
+	public void SetBlockInChunk(BlockRegistry.JasgBlock JBlock, int x, int y, int z) {
+		
+	}
+	
+	public void SetObjectInChunk(ObjectRegistry.JasgObject JObject, int x, int y, int z) {
+		
+	}
+}
+
+public enum LandmassGenerator {
+    Hex,
+    Perlin,
+    JasgCustom
+}
+
+public enum BiomeGenerator {
+    RulePuzzle,
+    HeatWetMap
+}
+
+[Serializable]
     public class WorldConfig {
         public bool loadExisting;
         public string worldName;
@@ -364,4 +449,6 @@ public class JasgWorldEngine : MonoBehaviour {
         public int chunkSize;
         public LandmassGenerator landmassGeneratorType;
         public BiomeGenerator biomeGeneratorType;
+        public int worldHightModifier;
+        public int worldSeaLevel;
     }
