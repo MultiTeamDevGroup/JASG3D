@@ -12,13 +12,13 @@ public class BlockRegistry {
     public class JasgBlock : JASGMain.JasgRegisterable {
         public int hardness;
         public Color mapColor;
-        public JASGMain.ResourceLocation model;
+        public JASGMain.ResourceLocation resourceLocation;
 
         public JasgBlock(string nameSpace, string id, JasgBlock.Properties properties) : base(id, nameSpace) {
             hardness = properties.harndessLevel.Equals(null) ? 1 : properties.harndessLevel;
             mapColor = properties.mapColor.Equals(null) ? new Color(0,0,0) : properties.mapColor;
             JASGMain.Registry.register(this);
-            //model = new JASGMain.ResourceLocation(nameSpace + "/models/block/", id+".ply", JASGMain.ModelType.BLOCK);
+            this.resourceLocation = new JASGMain.ResourceLocation(this, "blocks/");
         }
         
         public class Properties {

@@ -347,7 +347,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100682154}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.896695, y: 2.8053026, z: 8.237389}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 911177825}
@@ -369,6 +369,8 @@ MonoBehaviour:
   pauseMenu: {fileID: 0}
   uiMapDisplay: {fileID: 618545328}
   player: {fileID: 1595057271}
+  globalChunkHolder: {fileID: 911177824}
+  objectMaterial: {fileID: 2100000, guid: bce94d6093c8ee74885763f65dcdc6d7, type: 2}
   bypassLoadConfig: 1
   worldConfig:
     loadExisting: 0
@@ -728,7 +730,7 @@ MonoBehaviour:
   MovementSpeed: 5
   rb2D: {fileID: 1595057273}
   graphics: {fileID: 57391132}
-  chunkLoadingDistance: 4
+  chunkLoadingDistance: 2
 --- !u!65 &1595057272
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -776,7 +778,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1886214475
 RectTransform:
   m_ObjectHideFlags: 0

@@ -72,6 +72,8 @@ public class PLYVoxelParser {
             ret.triangles = tris.ToArray();
             ret.colors = vertexColor.ToArray();
             
+            ret.Optimize();
+            
             return ret;
         }
     }

@@ -75,12 +75,7 @@ public class JASGMain {
 
         public ResourceLocation(JasgRegisterable registerable, string location) {
             this.location = registerable.nameSpace + "/models/" + location + registerable.id;
-            if (!(Resources.Load<TextAsset>(this.location) != null)) {
-                this.model = PLYVoxelParser.parse(Resources.Load<TextAsset>(this.location).text).generateMesh();
-            }else {
-                Debug.LogException(new Exception("File at "+ this.location +" can not be loaded"));
-            }
-
+            this.model = PLYVoxelParser.parse(Resources.Load<TextAsset>(this.location).text).generateMesh();
         }
 
     }

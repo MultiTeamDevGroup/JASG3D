@@ -14,6 +14,8 @@ public class JasgWorldEngine : MonoBehaviour {
     public GameObject pauseMenu;
     public Renderer uiMapDisplay;
     public PlayerController player;
+    public GameObject globalChunkHolder;
+    public Material objectMaterial;
 
     [Header("Main World Config")]
     public bool bypassLoadConfig = false;
@@ -354,10 +356,10 @@ public class JasgWorldEngine : MonoBehaviour {
 					    int blockAltitude = landmassArray[realWorldX, realWorldY];
 					    
 					    int maxRandLength = biomeArray[realWorldX, realWorldY].decorator.surfaceBlocks.Count;
-					    chunk.SetBlockInChunk(biomeArray[realWorldX, realWorldY].decorator.surfaceBlocks[prng.Next(0, maxRandLength)], x, y, blockAltitude);
+					    chunk.SetBlockInChunk(biomeArray[realWorldX, realWorldY].decorator.surfaceBlocks[prng.Next(0, maxRandLength)], x, blockAltitude, y);
 					    
 					    if (surfaceObjectArray[realWorldX, realWorldY] != null) {
-						    chunk.SetObjectInChunk(surfaceObjectArray[realWorldX, realWorldY], x, y, blockAltitude+1);
+						    chunk.SetObjectInChunk(surfaceObjectArray[realWorldX, realWorldY], x, blockAltitude+1, y);
 					    }
 				    }
 			    }
@@ -387,7 +389,7 @@ public class JasgWorldEngine : MonoBehaviour {
 			    }
 		    }else {
 			    if (!chunk.isLoaded) {
-				    chunk.load();
+				    chunk.load(globalChunkHolder.transform, objectMaterial);
 			    }
 		    }
 		    
@@ -402,20 +404,61 @@ public class WorldChunk {
 	public BlockRegistry.JasgBlock[,,] chunkBlocks;
 	public ObjectRegistry.JasgObject[,,] chunkObjects;
 	public bool isLoaded;
+	public int chunkSize;
 
 	public WorldChunk(Vector2Int chunkPosition, int chunkSize) {
+		this.chunkSize = chunkSize;
 		this.chunkPosition = chunkPosition;
 		this.chunkBlocks = new BlockRegistry.JasgBlock[chunkSize, chunkSize, chunkSize];
 		this.chunkObjects = new ObjectRegistry.JasgObject[chunkSize, chunkSize, chunkSize];
 		this.isLoaded = false;
 	}
 
-	public WorldChunk load() {
+	public WorldChunk load(Transform globalChunkHolder, Material material) {
+		int realWorldX = this.chunkSize * chunkPosition.x;
+		int realWorldY = this.chunkSize * chunkPosition.y;
+		
+		GameObject chunkHolder = new GameObject();
+		chunkHolder.transform.position = new Vector3(realWorldX, 0, realWorldY);
+		chunkHolder.transform.SetParent(globalChunkHolder);
+		chunkHolder.name = chunkPosition.ToString();
+
+		List<Mesh> allMeshes;
+		for (int x = 0; x < this.chunkSize; x++) {
+			for (int y = 0; y < this.chunkSize; y++) {
+				for (int z = 0; z < this.chunkSize; z++) {
+					if (chunkBlocks[x, y, z] != null) {
+						GameObject objectus = new GameObject();
+						objectus.transform.position = new Vector3(chunkPosition.x, 0, chunkPosition.y);
+						objectus.transform.rotation = Quaternion.Euler(90,0, 0);
+						objectus.transform.SetParent(chunkHolder.transform);
+						objectus.transform.localPosition = new Vector3(x+0.5f, y+0.5f, z+0.5f);
+						objectus.transform.localScale = new Vector3(-0.1f, -0.1f, -0.1f);
+						objectus.AddComponent<MeshRenderer>().materials = new []{material};
+						objectus.AddComponent<MeshFilter>().mesh = chunkBlocks[x, y, z].resourceLocation.model;
+						objectus.name = chunkBlocks[x, y, z].id;
+					}
+					if (chunkObjects[x, y, z] != null) {
+						GameObject objectus = new GameObject();
+						objectus.transform.position = new Vector3(chunkPosition.x, 0, chunkPosition.y);
+						objectus.transform.rotation = Quaternion.Euler(90,0, 0);
+						objectus.transform.SetParent(chunkHolder.transform);
+						objectus.transform.localPosition = new Vector3(x+0.5f, y+1.5f, z+0.5f);
+						objectus.transform.localScale = new Vector3(-0.1f, -0.1f, -0.1f);
+						objectus.AddComponent<MeshRenderer>().materials = new []{material};
+						objectus.AddComponent<MeshFilter>().mesh = chunkObjects[x, y, z].resourceLocation.model;
+						objectus.name = chunkObjects[x, y, z].id;
+					}
+				}
+			}
+		}
+		
 		Debug.Log("Loaded chunk at " + chunkPosition);
 		this.isLoaded = true;
 		return this;
 	}
-	
+
+
 	public WorldChunk unload() {
 		Debug.Log("Unloaded chunk at " + chunkPosition);
 		this.isLoaded = false;
@@ -423,11 +466,11 @@ public class WorldChunk {
 	}
 
 	public void SetBlockInChunk(BlockRegistry.JasgBlock JBlock, int x, int y, int z) {
-		
+		chunkBlocks[x, y, z] = JBlock;
 	}
 	
 	public void SetObjectInChunk(ObjectRegistry.JasgObject JObject, int x, int y, int z) {
-		
+		chunkObjects[x, y, z] = JObject;
 	}
 }
 
