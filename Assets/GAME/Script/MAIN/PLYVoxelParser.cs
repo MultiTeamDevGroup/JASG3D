@@ -104,92 +104,49 @@ public class PLYVoxelParser {
         //Removing all voxels that has all 6 sides covered by another one, so less faces get turned into mesh == less lag
         
         //TODO make this part of the ply file parsing actually do something
-        int biggestX = 0;
-        int biggestY = 0;
-        int biggestZ = 0;
-        int smallestX = 0;
-        int smallestY = 0;
-        int smallestZ = 0;
-        
+
         for (int i = 0; i < voxelArray.Count; i++) {
-            if (voxelArray[i].x > biggestX) {
-                biggestX = voxelArray[i].x;
-            }
-            if (voxelArray[i].y > biggestY) {
-                biggestY = voxelArray[i].y;
-            }
-            if (voxelArray[i].z > biggestZ) {
-                biggestZ = voxelArray[i].z;
-            }
-            
-            if (voxelArray[i].x < smallestX) {
-                smallestX = voxelArray[i].x;
-            }
-            if (voxelArray[i].y < smallestY) {
-                smallestY = voxelArray[i].y;
-            }
-            if (voxelArray[i].z < smallestZ) {
-                smallestZ = voxelArray[i].z;
-            }
-        }
-
-        int xOffset = Mathf.Abs(smallestX) + 1;
-        int yOffset = Mathf.Abs(smallestY) + 1;
-        int zOffset = Mathf.Abs(smallestZ) + 1;
-        
-        Debug.Log("X: " + biggestX + " - " + smallestX + " - " + xOffset);
-        Debug.Log("Y: " + biggestY + " - " + smallestY + " - " + yOffset);
-        Debug.Log("Z: " + biggestZ + " - " + smallestZ + " - " + zOffset);
-        
-        Voxel[,,] voxArr = new Voxel[(biggestX + xOffset) * 10, (biggestY + yOffset) * 10, (biggestZ + zOffset) * 10];
-
-        foreach (Voxel voxel in voxelArray) {
-            voxArr[voxel.x + xOffset, voxel.y + yOffset, voxel.z + zOffset] = voxel;
-        }
-
-        int limX = biggestX + xOffset;
-        int limY = biggestY + yOffset;
-        int limZ = biggestZ + zOffset;
-        for (int x = 0; x < limX; x++) {
-            for (int y = 0; y < limY; y++) {
-                for (int z = 0; z < limZ; z++) {
-                    if (x > 1 && y > 1 && z > 1 && x < limX && y < limY && z < limZ) {
-                        bool top = false;
-                        bool bottom = false;
-                        bool left = false;
-                        bool rigth = false;
-                        bool infront = false;
-                        bool behind = false;
-                        
-                        if (voxArr[x, y + 1, z] != null) top = true;
-                        if (voxArr[x, y - 1, z] != null) bottom = true;
-                        if (voxArr[x+1, y, z] != null) left = true;
-                        if (voxArr[x-1, y, z] != null) rigth = true;
-                        if (voxArr[x, y, z+1] != null) infront = true;
-                        if (voxArr[x, y, z-1] != null) behind = true;
-
-                        if (top && bottom && left && rigth && infront && behind) {
-                            voxArr[x, y, z] = null;
-                        }
-                        
+            Vector3Int thisPos = voxelArray[i].getAsVector();
+            for (int j = 0; j < voxelArray.Count; j++) {
+                if (voxelArray[j].x == thisPos.x && voxelArray[j].z == thisPos.z) {
+                    if (voxelArray[j].y == thisPos.y + 1) {
+                        //above
+                        voxelArray[i].top.setTrue();
+                    }else if (voxelArray[j].y == thisPos.y - 1) {
+                        //below
+                        voxelArray[i].bottom.setTrue();
+                    }
+                }
+                
+                if (voxelArray[j].x == thisPos.x && voxelArray[j].y == thisPos.y) {
+                    if (voxelArray[j].z == thisPos.z + 1) {
+                        //right
+                        voxelArray[i].right.setTrue();
+                    }else if (voxelArray[j].z == thisPos.z - 1) {
+                        //left
+                        voxelArray[i].left.setTrue();
+                    }
+                }
+                
+                if (voxelArray[j].z == thisPos.z && voxelArray[j].y == thisPos.y) {
+                    if (voxelArray[j].x == thisPos.x + 1) {
+                        //front
+                        voxelArray[i].front.setTrue();
+                    }else if (voxelArray[j].x == thisPos.x - 1) {
+                        //back
+                        voxelArray[i].back.setTrue();
                     }
                 }
             }
         }
 
-        List<Voxel> optimisedVoxels = new List<Voxel>();;
-        
-        for (int x = 0; x < limX; x++) {
-            for (int y = 0; y < limY; y++) {
-                for (int z = 0; z < limZ; z++) {
-                    if (voxArr[x, y, z] != null) {
-                        optimisedVoxels.Add(voxArr[x,y,z]);
-                    }
-                }
+        for (int i = 0; i < voxelArray.Count; i++) {
+            if (voxelArray[i].isAllSidesCovered()) {
+                voxelArray.Remove(voxelArray[i]);
             }
         }
 
-        return new PLYFile(optimisedVoxels);
+        return new PLYFile(voxelArray);
     }
 
     public class Voxel {
@@ -200,6 +157,13 @@ public class PLYVoxelParser {
         public int r;
         public int g;
         public int b;
+
+        public VoxelFace top = new VoxelFace(false, Direction.TOP);
+        public VoxelFace bottom = new VoxelFace(false, Direction.BOTTOM);
+        public VoxelFace left = new VoxelFace(false, Direction.LEFT);
+        public VoxelFace right = new VoxelFace(false, Direction.RIGHT);
+        public VoxelFace back = new VoxelFace(false, Direction.BACK);
+        public VoxelFace front = new VoxelFace(false, Direction.FRONT);
 
         public Voxel(int x, int y, int z, int r, int g, int b) {
             this.x = x;
@@ -220,6 +184,39 @@ public class PLYVoxelParser {
 
         public Color32 getAsColor() {
             return new Color32((byte)this.r, (byte)this.g, (byte)this.b, 255);
+        }
+
+        public bool isAllSidesCovered() {
+            return top.isCovered && bottom.isCovered && left.isCovered && right.isCovered && back.isCovered && front.isCovered;
+        }
+
+        public enum Direction {
+            TOP,
+            BOTTOM,
+            LEFT,
+            RIGHT,
+            BACK,
+            FRONT
+        }
+
+        public class VoxelFace {
+            public bool isCovered;
+            public Direction direction;
+
+            public VoxelFace(bool isCovered, Direction direction) {
+                this.isCovered = isCovered;
+                this.direction = direction;
+            }
+
+            public VoxelFace setTrue() {
+                isCovered = true;
+                return this;
+            }
+            
+            public VoxelFace setFalse() {
+                isCovered = false;
+                return this;
+            }
         }
     }
 

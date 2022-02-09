@@ -432,8 +432,8 @@ public class WorldChunk {
 						objectus.transform.position = new Vector3(chunkPosition.x, 0, chunkPosition.y);
 						objectus.transform.rotation = Quaternion.Euler(90,0, 0);
 						objectus.transform.SetParent(chunkHolder.transform);
-						objectus.transform.localPosition = new Vector3(x+0.5f, y+0.5f, z+0.5f);
-						objectus.transform.localScale = new Vector3(-0.1f, -0.1f, -0.1f);
+						objectus.transform.localPosition = new Vector3(x, y, z);
+						objectus.transform.localScale = new Vector3(-0.0715f, -0.0715f, -0.0715f);
 						objectus.AddComponent<MeshRenderer>().materials = new []{material};
 						objectus.AddComponent<MeshFilter>().mesh = chunkBlocks[x, y, z].resourceLocation.model;
 						objectus.name = chunkBlocks[x, y, z].id;
@@ -443,8 +443,8 @@ public class WorldChunk {
 						objectus.transform.position = new Vector3(chunkPosition.x, 0, chunkPosition.y);
 						objectus.transform.rotation = Quaternion.Euler(90,0, 0);
 						objectus.transform.SetParent(chunkHolder.transform);
-						objectus.transform.localPosition = new Vector3(x+0.5f, y+1.5f, z+0.5f);
-						objectus.transform.localScale = new Vector3(-0.1f, -0.1f, -0.1f);
+						objectus.transform.localPosition = new Vector3(x, y+0.5f, z);
+						objectus.transform.localScale = new Vector3(-0.0715f, -0.0715f, -0.0715f);
 						objectus.AddComponent<MeshRenderer>().materials = new []{material};
 						objectus.AddComponent<MeshFilter>().mesh = chunkObjects[x, y, z].resourceLocation.model;
 						objectus.name = chunkObjects[x, y, z].id;
