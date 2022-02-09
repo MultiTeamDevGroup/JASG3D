@@ -423,7 +423,6 @@ public class WorldChunk {
 		chunkHolder.transform.SetParent(globalChunkHolder);
 		chunkHolder.name = chunkPosition.ToString();
 
-		List<Mesh> allMeshes;
 		for (int x = 0; x < this.chunkSize; x++) {
 			for (int y = 0; y < this.chunkSize; y++) {
 				for (int z = 0; z < this.chunkSize; z++) {
