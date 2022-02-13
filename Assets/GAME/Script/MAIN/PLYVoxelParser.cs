@@ -15,7 +15,7 @@ public class PLYVoxelParser {
             this.voxels.AddRange(voxels);
         }
 
-        public Mesh generateMesh() {
+        public Mesh generateMeshV1() {
 
             List<Vector3> vertices_ = new List<Vector3>();
             List<Color> vertexColor = new List<Color>();
@@ -76,6 +76,105 @@ public class PLYVoxelParser {
             
             return ret;
         }
+
+        public Mesh generateMesh() {
+            List<Vector3> vertices_ = new List<Vector3>();
+            List<Color> vertexColor = new List<Color>();
+            List<int> tris = new List<int>();
+
+            for (int i = 0; i < voxels.Count; i++) {
+                
+                vertices_.Add(new Vector3(voxels[i].x, voxels[i].y, voxels[i].z)); //0, 0, 0
+                vertices_.Add(new Vector3(voxels[i].x, voxels[i].y, voxels[i].z+1)); //0, 0, 1
+                vertices_.Add(new Vector3(voxels[i].x+1, voxels[i].y, voxels[i].z)); //1, 0, 0
+                vertices_.Add(new Vector3(voxels[i].x+1, voxels[i].y, voxels[i].z+1)); //1, 0, 1
+                
+                vertices_.Add(new Vector3(voxels[i].x, voxels[i].y+1, voxels[i].z)); //0, 1, 0
+                vertices_.Add(new Vector3(voxels[i].x, voxels[i].y+1, voxels[i].z+1)); //0, 1, 1
+                vertices_.Add(new Vector3(voxels[i].x+1, voxels[i].y+1, voxels[i].z)); //1, 1, 0
+                vertices_.Add(new Vector3(voxels[i].x+1, voxels[i].y+1, voxels[i].z+1)); //1, 1, 1
+                
+                Color vertexColor_ = new Color32((byte)voxels[i].r, (byte)voxels[i].g, (byte)voxels[i].b, 255);
+                vertexColor.Add(vertexColor_);
+                vertexColor.Add(vertexColor_);
+                vertexColor.Add(vertexColor_);
+                vertexColor.Add(vertexColor_);
+                vertexColor.Add(vertexColor_);
+                vertexColor.Add(vertexColor_);
+                vertexColor.Add(vertexColor_);
+                vertexColor.Add(vertexColor_);
+
+                List<int> topTris = new List<int>();
+                List<int> bottomTris = new List<int>();
+                List<int> leftTris = new List<int>();
+                List<int> rightTris = new List<int>();
+                List<int> backTris = new List<int>();
+                List<int> frontTris = new List<int>();
+                
+                List<int> triangles_ = new List<int>();
+                
+                int d = i * 8;
+                if (!voxels[i].top.isCovered) {
+                    topTris = new List<int> {
+                        d + 4, d + 5, d + 6,
+                        d + 5, d + 7, d + 6,
+                    };
+                    triangles_.AddRange(topTris);
+                }
+                
+                if (!voxels[i].bottom.isCovered) {
+                    bottomTris = new List<int> {
+                        d + 0, d + 2, d + 1,
+                        d + 1, d + 2, d + 3,
+                    };
+                    triangles_.AddRange(bottomTris);
+                }
+                
+                if (!voxels[i].left.isCovered) {
+                    leftTris = new List<int> {
+                        d + 1, d + 5, d + 4,
+                        d + 4, d + 0, d + 1,
+                    };
+                    triangles_.AddRange(leftTris);
+                }
+                
+                if (!voxels[i].right.isCovered) {
+                    rightTris = new List<int> {
+                        d + 2, d + 6, d + 7,
+                        d + 7, d + 3, d + 2,
+                    };
+                    triangles_.AddRange(rightTris);
+                }
+                
+                if (!voxels[i].back.isCovered) {
+                    backTris = new List<int> {
+                        d + 5, d + 1, d + 3,
+                        d + 3, d + 7, d + 5
+                    };
+                    triangles_.AddRange(backTris);
+                }
+                
+                if (!voxels[i].front.isCovered) {
+                    frontTris = new List<int> {
+                        d + 0, d + 4, d + 2,
+                        d + 4, d + 6, d + 2,
+                    };
+                    triangles_.AddRange(frontTris);
+                }
+
+                tris.AddRange(triangles_);
+            }
+
+            Mesh ret = new Mesh();
+            ret.Clear();
+            ret.vertices = vertices_.ToArray();
+            ret.triangles = tris.ToArray();
+            ret.colors = vertexColor.ToArray();
+            
+            ret.Optimize();
+            
+            return ret;
+        }
     }
     
     public static PLYFile parse(string fileContent) {
@@ -120,21 +219,17 @@ public class PLYVoxelParser {
                 
                 if (voxelArray[j].x == thisPos.x && voxelArray[j].y == thisPos.y) {
                     if (voxelArray[j].z == thisPos.z + 1) {
-                        //right
-                        voxelArray[i].right.setTrue();
+                        voxelArray[i].back.setTrue();
                     }else if (voxelArray[j].z == thisPos.z - 1) {
-                        //left
-                        voxelArray[i].left.setTrue();
+                        voxelArray[i].front.setTrue();
                     }
                 }
                 
                 if (voxelArray[j].z == thisPos.z && voxelArray[j].y == thisPos.y) {
                     if (voxelArray[j].x == thisPos.x + 1) {
-                        //front
-                        voxelArray[i].front.setTrue();
+                        voxelArray[i].right.setTrue();
                     }else if (voxelArray[j].x == thisPos.x - 1) {
-                        //back
-                        voxelArray[i].back.setTrue();
+                        voxelArray[i].left.setTrue();
                     }
                 }
             }
