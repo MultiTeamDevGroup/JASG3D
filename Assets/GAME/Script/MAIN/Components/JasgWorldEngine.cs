@@ -388,8 +388,10 @@ public class JasgWorldEngine : MonoBehaviour {
 				    chunk.unload();
 			    }
 		    }else {
-			    if (!chunk.isLoaded) {
-				    chunk.load(globalChunkHolder.transform, objectMaterial);
+			    if (!chunk.isLoaded && !chunk.isGenerated) {
+				    chunk.generate(globalChunkHolder.transform, objectMaterial);
+			    }else if (!chunk.isLoaded && chunk.isGenerated) {
+				    chunk.load();
 			    }
 		    }
 		    
@@ -403,8 +405,10 @@ public class WorldChunk {
 	public Vector2Int chunkPosition;
 	public BlockRegistry.JasgBlock[,,] chunkBlocks;
 	public ObjectRegistry.JasgObject[,,] chunkObjects;
+	public bool isGenerated = false;
 	public bool isLoaded;
 	public int chunkSize;
+	public Transform thisChunkHolder;
 
 	public WorldChunk(Vector2Int chunkPosition, int chunkSize) {
 		this.chunkSize = chunkSize;
@@ -414,7 +418,7 @@ public class WorldChunk {
 		this.isLoaded = false;
 	}
 	
-	public WorldChunk load(Transform globalChunkHolder, Material material) {
+	public WorldChunk generate(Transform globalChunkHolder, Material material) {
 		int realWorldX = this.chunkSize * chunkPosition.x;
 		int realWorldY = this.chunkSize * chunkPosition.y;
 		
@@ -422,6 +426,8 @@ public class WorldChunk {
 		chunkHolder.transform.position = new Vector3(realWorldX, 0, realWorldY);
 		chunkHolder.transform.SetParent(globalChunkHolder);
 		chunkHolder.name = chunkPosition.ToString();
+		thisChunkHolder = chunkHolder.transform;
+		thisChunkHolder.gameObject.SetActive(true);
 
 		float universalScale = -0.0625f;
 		
@@ -454,14 +460,22 @@ public class WorldChunk {
 			}
 		}
 		
-		Debug.Log("Loaded chunk at " + chunkPosition);
+		Debug.Log("Generated and loaded chunk at " + chunkPosition);
+		this.isGenerated = true;
 		this.isLoaded = true;
 		return this;
 	}
 
-
+	public WorldChunk load() {
+		Debug.Log("Loaded chunk at " + chunkPosition);
+		thisChunkHolder.gameObject.SetActive(true);
+		this.isLoaded = true;
+		return this;
+	}
+	
 	public WorldChunk unload() {
 		Debug.Log("Unloaded chunk at " + chunkPosition);
+		thisChunkHolder.gameObject.SetActive(false);
 		this.isLoaded = false;
 		return this;
 	}
