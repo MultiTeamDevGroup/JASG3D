@@ -413,7 +413,7 @@ public class WorldChunk {
 		this.chunkObjects = new ObjectRegistry.JasgObject[chunkSize, chunkSize, chunkSize];
 		this.isLoaded = false;
 	}
-
+	
 	public WorldChunk load(Transform globalChunkHolder, Material material) {
 		int realWorldX = this.chunkSize * chunkPosition.x;
 		int realWorldY = this.chunkSize * chunkPosition.y;
@@ -423,6 +423,8 @@ public class WorldChunk {
 		chunkHolder.transform.SetParent(globalChunkHolder);
 		chunkHolder.name = chunkPosition.ToString();
 
+		float universalScale = -0.0625f;
+		
 		for (int x = 0; x < this.chunkSize; x++) {
 			for (int y = 0; y < this.chunkSize; y++) {
 				for (int z = 0; z < this.chunkSize; z++) {
@@ -432,7 +434,7 @@ public class WorldChunk {
 						objectus.transform.rotation = Quaternion.Euler(90,0, 0);
 						objectus.transform.SetParent(chunkHolder.transform);
 						objectus.transform.localPosition = new Vector3(x, y, z);
-						objectus.transform.localScale = new Vector3(-0.0715f, -0.0715f, -0.0715f);
+						objectus.transform.localScale = new Vector3(universalScale, universalScale, universalScale);
 						objectus.AddComponent<MeshRenderer>().materials = new []{material};
 						objectus.AddComponent<MeshFilter>().mesh = chunkBlocks[x, y, z].resourceLocation.model;
 						objectus.name = chunkBlocks[x, y, z].id;
@@ -442,8 +444,8 @@ public class WorldChunk {
 						objectus.transform.position = new Vector3(chunkPosition.x, 0, chunkPosition.y);
 						objectus.transform.rotation = Quaternion.Euler(90,0, 0);
 						objectus.transform.SetParent(chunkHolder.transform);
-						objectus.transform.localPosition = new Vector3(x, y+0.5f, z);
-						objectus.transform.localScale = new Vector3(-0.0715f, -0.0715f, -0.0715f);
+						objectus.transform.localPosition = new Vector3(x, y, z);
+						objectus.transform.localScale = new Vector3(universalScale, universalScale, universalScale);
 						objectus.AddComponent<MeshRenderer>().materials = new []{material};
 						objectus.AddComponent<MeshFilter>().mesh = chunkObjects[x, y, z].resourceLocation.model;
 						objectus.name = chunkObjects[x, y, z].id;
