@@ -106,7 +106,8 @@ public class JasgWorldEngine : MonoBehaviour {
     }
 
     public WorldConfig LoadWorldConfig() {
-        return new WorldConfig();
+		//return new WorldConfig();
+		return null;
     }
 
     public void SetupWorld() {
@@ -512,4 +513,29 @@ public enum BiomeGenerator {
         public BiomeGenerator biomeGeneratorType;
         public int worldHightModifier;
         public int worldSeaLevel;
-    }
+
+		public WorldConfig(bool loadExisting, string worldName, bool genRandomSeed, int worldSeed, int worldSize, int chunkSize, LandmassGenerator landmassGeneratorType, BiomeGenerator biomeGeneratorType, int worldHightModifier, int worldSeaLevel) {
+			this.loadExisting = loadExisting;
+			this.worldName = worldName;
+			this.genRandomSeed = genRandomSeed;
+			if (genRandomSeed) { 
+				this.worldSeed = new System.Random().Next(99999);
+			} else { 
+				this.worldSeed = worldSeed;
+			}
+			this.worldSize = worldSize;
+			this.chunkSize = chunkSize;
+			this.landmassGeneratorType = landmassGeneratorType;
+			this.biomeGeneratorType = biomeGeneratorType;
+			this.worldHightModifier = worldHightModifier;
+			this.worldSeaLevel = worldSeaLevel;
+		}
+
+		public void debugThis() {
+			Debug.Log("-le [" + loadExisting + "] -name [" + worldName + "] -grs [" + genRandomSeed + "] -seed [" + worldSeed + "] -size [" + worldSize + "] -chsize [" + chunkSize + "] -lmgt [" + landmassGeneratorType + "] -bgt [" + biomeGeneratorType + "] -whm [" + worldHightModifier + "] -sealvl [" + worldSeaLevel+"]");
+		}
+
+		public void debug(WorldConfig cfg) {
+			Debug.Log("-le [" + cfg.loadExisting + "] -name [" + cfg.worldName + "] -grs [" + cfg.genRandomSeed + "] -seed [" + cfg.worldSeed + "] -size [" + cfg.worldSize + "] -chsize [" + cfg.chunkSize + "] -lmgt [" + cfg.landmassGeneratorType + "] -bgt [" + cfg.biomeGeneratorType + "] -whm ["+ cfg.worldHightModifier + "] -sealvl [" + cfg.worldSeaLevel +"]");
+		}
+}
