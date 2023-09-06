@@ -106,8 +106,16 @@ public class JasgWorldEngine : MonoBehaviour {
     }
 
     public WorldConfig LoadWorldConfig() {
-		//return new WorldConfig();
-		return null;
+		WorldConfig config; 
+		if (File.Exists(GameLocationUtil.gameSavesLoc + "/worldconfig.jasgcfg")) {
+			Debug.Log("Loading world config from [" + GameLocationUtil.gameSavesLoc + "/worldconfig.jasgcfg" + "]");
+			string fileText = File.ReadAllText(GameLocationUtil.gameSavesLoc + "/worldconfig.jasgcfg");
+            config = JsonUtility.FromJson<WorldConfig>(fileText);
+        } else {
+			Debug.Log("Failed to load setting from world config file, rolling with default values");
+			config = new WorldConfig(false, "new_world_" + System.DateTime.Now, true, 0, 1024, 16, LandmassGenerator.Perlin, BiomeGenerator.HeatWetMap, 10, 4);
+        }
+        return config;
     }
 
     public void SetupWorld() {

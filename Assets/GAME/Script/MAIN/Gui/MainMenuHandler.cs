@@ -1,8 +1,11 @@
+using MultiCoreLibCSE;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenuHandler : MonoBehaviour {
 
@@ -61,8 +64,8 @@ public class MainMenuHandler : MonoBehaviour {
         //steps:
         //read settings from gui - check
         //create world gen config object from said settings - check
-        //save config to file
-        //async load JWE scene
+        //save config to file - check
+        //async load JWE scene - check
 
         bool genRandomSeed = true;
         if (WorldSeedInputField.text.Length > 0) {
@@ -72,6 +75,16 @@ public class MainMenuHandler : MonoBehaviour {
 
         Debug.Log("Generating new world with settings:"); 
         config.debugThis();
+
+        FileHelperUtil.SaveFile(config, GameLocationUtil.gameSavesLoc + "/worldconfig.jasgcfg");
+        if (File.Exists(GameLocationUtil.gameSavesLoc + "/worldconfig.jasgcfg")) {
+            Debug.Log("Saved config [" + GameLocationUtil.gameSavesLoc + "/worldconfig.jasgcfg" + "]");
+        } else {
+            Debug.Log("Faled to save world config");
+        }
+
+        StartCoroutine(GenericUtils.LoadSceneAsync("JWE"));
+        //SceneManager.LoadScene("JWE");
     }
 
     public void LoadWorld() {

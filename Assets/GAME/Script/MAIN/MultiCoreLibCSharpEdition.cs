@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Object = System.Object;
 
 namespace MultiCoreLibCSE {
@@ -45,6 +46,7 @@ namespace MultiCoreLibCSE {
         public static void SaveFile(Object saveObject, String location) {
             string jsonString = JsonUtility.ToJson(saveObject, true);
             File.WriteAllText(location, jsonString);
+
         }
         
     }
@@ -94,6 +96,18 @@ namespace MultiCoreLibCSE {
             public T Key { get; set; }
             public K Value { get; set; }
         }
-        
+
+        public static IEnumerator LoadSceneAsync(string sceneToLoad)
+        {
+
+            AsyncOperation SceneLoadOp = SceneManager.LoadSceneAsync(sceneToLoad);
+
+            while (!SceneLoadOp.isDone)
+            {
+                yield return null;
+            }
+
+        }
+
     }
 }
